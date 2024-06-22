@@ -41,7 +41,7 @@ const ProfileUpdate = () => {
     if (photo) formData.append('photo', photo);
 
     try {
-      await axios.post('http://localhost:5000/api/user/update-profile', formData, {
+      await axios.post(`${process.env.REACT_APP_BASE_URL}/api/user/update-profile`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'x-auth-token': token,

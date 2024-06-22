@@ -14,7 +14,7 @@ const Dashboard = () => {
         return;
       }
       try {
-        const res = await axios.get('http://localhost:5000/api/user/profile', {
+        const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/user/profile`, {
           headers: {
             'x-auth-token': token,
           },
@@ -37,12 +37,12 @@ const Dashboard = () => {
       ) : (
         <img src="https://static.vecteezy.com/system/resources/previews/018/765/757/original/user-profile-icon-in-flat-style-member-avatar-illustration-on-isolated-background-human-permission-sign-business-concept-vector.jpg" alt="Default Profile" />
       )}
-        <p>Name: {user.name || ""}</p>
-        <p>Email: {user.email || ""}</p>
-        <p>Phone: {user.phone || ""}</p>
-        <p>Past Experience: {user.pastExperience || ""}</p>
-        <p>Skill Sets: {user.skillSets && user.skillSets.join(', ') || ""}</p>
-        <p>Education: {user.education || ""}</p>
+        <p>Name: {user.name}</p>
+        <p>Email: {user.email}</p>
+        <p>Phone: {user.phone}</p>
+        <p>Past Experience: {user.pastExperience}</p>
+        <p>Skill Sets: {user.skillSets && user.skillSets.join(', ')}</p>
+        <p>Education: {user.education}</p>
       </div>
       <button onClick={() => navigate('/profile-update')}>Update Profile</button>
     </div>
