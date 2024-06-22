@@ -25,19 +25,24 @@ const Dashboard = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="dashboard-container">
       <h2>Dashboard</h2>
       <div className="profile">
+        {/* <img src={`data:image/jpeg;base64,${user.photo}`} alt="Profile" /> */}
+        {user.photo ? (
         <img src={`data:image/jpeg;base64,${user.photo}`} alt="Profile" />
-        <p>Name: {user.name}</p>
-        <p>Email: {user.email}</p>
-        <p>Phone: {user.phone}</p>
-        <p>Past Experience: {user.pastExperience}</p>
-        <p>Skill Sets: {user.skillSets && user.skillSets.join(', ')}</p>
-        <p>Education: {user.education}</p>
+      ) : (
+        <img src="https://static.vecteezy.com/system/resources/previews/018/765/757/original/user-profile-icon-in-flat-style-member-avatar-illustration-on-isolated-background-human-permission-sign-business-concept-vector.jpg" alt="Default Profile" />
+      )}
+        <p>Name: {user.name || ""}</p>
+        <p>Email: {user.email || ""}</p>
+        <p>Phone: {user.phone || ""}</p>
+        <p>Past Experience: {user.pastExperience || ""}</p>
+        <p>Skill Sets: {user.skillSets && user.skillSets.join(', ') || ""}</p>
+        <p>Education: {user.education || ""}</p>
       </div>
       <button onClick={() => navigate('/profile-update')}>Update Profile</button>
     </div>

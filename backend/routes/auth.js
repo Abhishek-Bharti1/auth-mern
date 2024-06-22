@@ -42,8 +42,10 @@ router.post(
         res.json({ token });
       });
     } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server error');
+      if (err.code === 11000 && err.keyPattern && err.keyPattern.email === 1) {
+        return res.status(400).json({ msg: 'Email already exists' });
+      }
+      res.status(500).send('Server Error');
     }
   }
 );

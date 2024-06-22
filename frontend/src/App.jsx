@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter,Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
@@ -10,6 +11,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
+      <Toaster position="top-center" reverseOrder={false} /> 
         <Routes>
           <Route exact path="/login" element={<Login/>} />
           <Route path="/" element={<Register/>} />

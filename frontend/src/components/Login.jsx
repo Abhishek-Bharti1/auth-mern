@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate} from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const [phone, setPhone] = useState('');
@@ -10,10 +11,12 @@ const navigate = useNavigate();
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:5000/api/auth/login', { phone, password });
+      toast.success("Login successful",{icon:"👏"})
       localStorage.setItem('token', res.data.token);
       navigate('/dashboard');
     } catch (err) {
       console.error(err);
+      toast.error("Something went wrong!")
     }
   };
 
