@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import Loader from './Loader';
 
 const ProfileUpdate = () => {
   const [user, setUser] = useState({});
   const [photo, setPhoto] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,6 +17,7 @@ const ProfileUpdate = () => {
         navigate('/');
         return;
       }
+      setLoading(true);
       try {
         const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/user/profile`, {
           headers: {
@@ -24,6 +27,8 @@ const ProfileUpdate = () => {
         setUser(res.data);
       } catch (err) {
         console.error(err);
+      }finally{
+        setLoading(false);
       }
     };
     fetchData();
@@ -41,6 +46,7 @@ const ProfileUpdate = () => {
     if (photo) formData.append('photo', photo);
 
     try {
+      setLoading(true);
       await axios.post(`${process.env.REACT_APP_BASE_URL}/api/user/update-profile`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -52,9 +58,13 @@ const ProfileUpdate = () => {
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong!")
+    }finally {
+      setLoading(false);
     }
   };
-
+  if (loading) {
+    return <Loader />; 
+  }
   return (
     <div className="profile-update-container">
       <form onSubmit={handleSubmit}>

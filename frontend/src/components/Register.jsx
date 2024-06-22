@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import Loader from "./Loader";
 
 const Register = () => {
   const [phone, setPhone] = useState("");
@@ -9,6 +10,7 @@ const Register = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [retypePassword, setRetypePassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,6 +20,7 @@ const Register = () => {
     else if(password.length < 6){
       return toast.error("Password must be 6 or more characters!", { icon: "🦥" });
     }
+    setLoading(true);
     try {
     await axios.post(`${process.env.REACT_APP_BASE_URL}/api/auth/register`, {
         phone,
@@ -29,9 +32,13 @@ const Register = () => {
       navigate("/login");
     } catch (err) {
       toast.error("Something went wrong!");
+    }finally{
+      setLoading(false);
     }
   };
-
+  if (loading) {
+    return <Loader />; 
+  }
   return (
     <div className="register-container">
       <form onSubmit={handleSubmit}>

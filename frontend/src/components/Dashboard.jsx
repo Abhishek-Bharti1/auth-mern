@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {  useNavigate } from 'react-router-dom';
+import Loader from './Loader';
 
 const Dashboard = () => {
   const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(false);
+
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const token = localStorage.getItem('token');
       if (!token) {
         navigate('/');
@@ -23,15 +28,19 @@ const Dashboard = () => {
       } catch (err) {
         console.error(err);
       }
+      finally{
+        setLoading(false); 
+      }
     };
     fetchData();
   }, [navigate]);
-
+  if (loading) {
+    return <Loader />; 
+  }
   return (
     <div className="dashboard-container">
       <h2>Dashboard</h2>
       <div className="profile">
-        {/* <img src={`data:image/jpeg;base64,${user.photo}`} alt="Profile" /> */}
         {user.photo ? (
         <img src={`data:image/jpeg;base64,${user.photo}`} alt="Profile" />
       ) : (
