@@ -14,6 +14,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/uploads', express.static('uploads'));
 
+
+app.get("/",(req,res)=>{
+    res.send("<h1>API is running...</h1>");
+})
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 
