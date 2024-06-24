@@ -17,7 +17,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/auth/login`, { phone, password });
+      const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/auth/login`, { phone:"+91"+phone, password });
       toast.success("Login successful", { icon: "👏" });
       localStorage.setItem('token', res.data.token);
       navigate('/dashboard');
