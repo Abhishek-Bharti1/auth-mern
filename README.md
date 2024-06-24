@@ -23,6 +23,10 @@ After that create a file in the backend Folder with the name .env and put the be
     PORT : 5000
    MONGO_URI: "<MONGODB_ATLAS_URI>" or localhost URI # example mongodb://localhost:27017/
 ```
+## Demo vedio link
+```
+https://drive.google.com/file/d/1F4_OqnLx7ZfNG30iHdjJagk50X8JxkNZ/view?usp=sharing
+```
 
 Now, create all these variables in the project and make sure you set all the dependencies with npm install command.
 Otherwise, the project will not work.
