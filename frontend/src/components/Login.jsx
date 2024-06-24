@@ -48,7 +48,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/auth/verify-otp`, { phone, otp });
+      const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/auth/verify-otp`, { phone:"+91"+phone , otp });
       toast.success("Login successful", { icon: "👏" });
       localStorage.setItem('token', res.data.token);
       navigate('/dashboard');
