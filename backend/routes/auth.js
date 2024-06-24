@@ -4,10 +4,93 @@ const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
 const User = require('../models/User');
 const dotenv = require('dotenv');
-
+const twilio = require('twilio');
 dotenv.config();
 
 const router = express.Router();
+
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const messagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID;
+
+const client = new twilio(accountSid, authToken);
+
+// Route to request OTP
+router.post('/request-otp', [check('phone', 'Phone is required').not().isEmpty()], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { phone } = req.body;
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+try {
+  let user = await User.findOne({ phone });
+
+  if (!user) {
+    user = new User({ phone });
+  }
+
+  user.otp = otp;
+  user.otpExpire = Date.now() + 1 * 60 * 1000; // OTP valid for 1 minutes
+  await user.save();
+
+  await client.messages.create({
+    body: `Your OTP is ${otp}`,
+    to: phone,
+    messagingServiceSid: messagingServiceSid,
+  });
+
+  res.status(200).json({ msg: 'OTP sent successfully' });
+} catch (err) {
+  console.error(err.message);
+  res.status(500).send('Server error');
+}
+});
+
+// Verify OTP and login
+// Route to verify OTP and login
+router.post('/verify-otp', [check('phone', 'Phone is required').not().isEmpty(), check('otp', 'OTP is required').not().isEmpty()], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { phone, otp } = req.body;
+
+  try {
+    let user = await User.findOne({ phone });
+
+    if (!user) {
+      return res.status(400).json({ msg: 'User not found' });
+    }
+
+    if (user.otp !== otp) {
+      return res.status(400).json({ msg: 'Invalid OTP' });
+    }
+
+    if (Date.now() > user.otpExpire) {
+      return res.status(400).json({ msg: 'OTP has expired' });
+    }
+
+    // Clear the OTP and OTP expiry after successful verification
+    user.otp = undefined;
+    user.otpExpire = undefined;
+    await user.save();
+
+    // Generate JWT token
+    const payload = { user: { id: user.id } };
+
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 360000 }, (err, token) => {
+      if (err) throw err;
+      res.json({ token });
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
 
 // Register user
 router.post(

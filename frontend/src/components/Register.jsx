@@ -23,7 +23,7 @@ const Register = () => {
     setLoading(true);
     try {
     await axios.post(`${process.env.REACT_APP_BASE_URL}/api/auth/register`, {
-        phone,
+        phone:"+91"+phone,
         email,
         name,
         password,
