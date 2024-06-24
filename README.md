@@ -1,7 +1,7 @@
 # Welcome to MERN Login System
 
 Hello everyone, In this project, we are going to create **MERN Stack App with Login System**. 
-We will take a look at how to create login, registration, profile, and update profile Node.js backend application.
+We will take a look at how to create login, registration, profile,Login with OTP and update profile Node.js backend application.
 
 ## Working with the Project
 
